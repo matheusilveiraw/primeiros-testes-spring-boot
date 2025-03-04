@@ -1,14 +1,15 @@
 package com.minhaprimeiraapijava.minha_api.controllers;
 
-import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.minhaprimeiraapijava.minha_api.models.Usuario;
 import com.minhaprimeiraapijava.minha_api.services.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/api/usuarios")
 public class UsuarioController {
 
     @Autowired
@@ -22,6 +23,16 @@ public class UsuarioController {
     @GetMapping
     public List<Usuario> listarUsuarios() {
         return usuarioService.listarUsuarios();
+    }
+
+    @GetMapping("/{id}")
+    public Optional<Usuario> buscarUsuario(@PathVariable Long id) {
+        return usuarioService.buscarPorId(id);
+    }
+
+    @PutMapping("/{id}")
+    public Usuario atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
+        return usuarioService.atualizarUsuario(id, usuario);
     }
 
     @DeleteMapping("/{id}")
