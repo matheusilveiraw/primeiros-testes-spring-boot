@@ -1,36 +1,31 @@
 package com.minhaprimeiraapijava.minha_api.controllers;
 
-import com.minhaprimeiraapijava.minha_api.models.Usuario;
-import com.minhaprimeiraapijava.minha_api.repositories.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.minhaprimeiraapijava.minha_api.models.Usuario;
+import com.minhaprimeiraapijava.minha_api.services.UsuarioService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/usuarios")
+@RequestMapping("/usuarios")
 public class UsuarioController {
+
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuarioService usuarioService;
 
     @PostMapping
     public Usuario criarUsuario(@RequestBody Usuario usuario) {
-        return usuarioRepository.save(usuario);
+        return usuarioService.criarUsuario(usuario);
     }
 
     @GetMapping
     public List<Usuario> listarUsuarios() {
-        return usuarioRepository.findAll();
+        return usuarioService.listarUsuarios();
     }
 
     @DeleteMapping("/{id}")
     public void deletarUsuario(@PathVariable Long id) {
-        usuarioRepository.deleteById(id);
-    }
-
-    @PutMapping("/{id}")
-    public Usuario atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
-        usuario.setId(id);
-        return usuarioRepository.save(usuario);
+        usuarioService.deletarUsuario(id);
     }
 }
