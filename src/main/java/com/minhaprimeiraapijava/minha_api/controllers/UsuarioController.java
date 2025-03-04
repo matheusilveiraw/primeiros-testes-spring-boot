@@ -1,42 +1,36 @@
 package com.minhaprimeiraapijava.minha_api.controllers;
 
+import com.minhaprimeiraapijava.minha_api.models.Usuario;
+import com.minhaprimeiraapijava.minha_api.repositories.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/api/usuarios")
 public class UsuarioController {
-
-    private List<String> usuarios = new ArrayList<>();
-
-    @GetMapping
-    public List<String> listarUsuarios() {
-        return usuarios;
-    }
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @PostMapping
-    public String criarUsuario(@RequestBody String nome) {
-        usuarios.add(nome);
-        return "Usuário " + nome + " criado com sucesso!";
+    public Usuario criarUsuario(@RequestBody Usuario usuario) {
+        return usuarioRepository.save(usuario);
     }
 
-    @PutMapping("/{index}")
-    public String atualizarUsuario(@PathVariable int index, @RequestBody String nome) {
-        if (index >= 0 && index < usuarios.size()) {
-            usuarios.set(index, nome);
-            return "Usuário atualizado para: " + nome;
-        }
-        return "Usuário não encontrado!";
+    @GetMapping
+    public List<Usuario> listarUsuarios() {
+        return usuarioRepository.findAll();
     }
 
-    @DeleteMapping("/{index}")
-    public String deletarUsuario(@PathVariable int index) {
-        if (index >= 0 && index < usuarios.size()) {
-            String removido = usuarios.remove(index);
-            return "Usuário " + removido + " removido com sucesso!";
-        }
-        return "Usuário não encontrado!";
+    @DeleteMapping("/{id}")
+    public void deletarUsuario(@PathVariable Long id) {
+        usuarioRepository.deleteById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Usuario atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
+        usuario.setId(id);
+        return usuarioRepository.save(usuario);
     }
 }
