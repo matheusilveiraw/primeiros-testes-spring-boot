@@ -1,7 +1,7 @@
-package com.minhaprimeiraapijava.minha_api.controllers;
+package com.minhaprimeiraapijava.controllers;
 
-import com.minhaprimeiraapijava.minha_api.models.Usuario;
-import com.minhaprimeiraapijava.minha_api.services.UsuarioService;
+import com.minhaprimeiraapijava.models.Usuario;
+import com.minhaprimeiraapijava.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

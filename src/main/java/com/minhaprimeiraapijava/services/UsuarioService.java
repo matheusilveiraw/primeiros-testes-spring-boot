@@ -1,7 +1,7 @@
-package com.minhaprimeiraapijava.minha_api.services;
+package com.minhaprimeiraapijava.services;
 
-import com.minhaprimeiraapijava.minha_api.models.Usuario;
-import com.minhaprimeiraapijava.minha_api.repositories.UsuarioRepository;
+import com.minhaprimeiraapijava.models.Usuario;
+import com.minhaprimeiraapijava.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

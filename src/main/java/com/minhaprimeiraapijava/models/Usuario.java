@@ -1,4 +1,4 @@
-package com.minhaprimeiraapijava.minha_api.models;
+package com.minhaprimeiraapijava.models;
 
 import jakarta.persistence.*;
 
