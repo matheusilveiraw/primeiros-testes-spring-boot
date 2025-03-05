@@ -87,9 +87,27 @@ public class UsuarioController {
         }
     }
 
+
+
     @GetMapping("/{id}")
-    public Optional<Usuario> buscarUsuario(@PathVariable Long id) {
-        return usuarioService.buscarPorId(id);
+    public ResponseEntity<?> buscarUsuario(@PathVariable Long id) {
+        try {
+            Optional<Usuario> usuario = usuarioService.buscarPorId(id);
+
+            if (usuario.isEmpty()) { //se não encontrar
+                Map<String, Object> response = new HashMap<>();
+                response.put("status", HttpStatus.NOT_FOUND.value());
+                response.put("message", "Usuário com ID " + id + " não encontrado.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+
+            return ResponseEntity.ok(usuario.get()); //deu boa, não trás nenhuma msg pois já trás os dados
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.put("message", "Erro ao buscar usuário: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     @PutMapping("/{id}")
