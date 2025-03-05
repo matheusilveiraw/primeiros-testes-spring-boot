@@ -15,7 +15,7 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     public Usuario criarUsuario(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+        return usuarioRepository.save(usuario); //chama o repositorio que fica com os sqls
     }
 
     public List<Usuario> listarUsuarios() {

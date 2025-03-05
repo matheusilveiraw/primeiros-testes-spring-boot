@@ -18,6 +18,7 @@ import java.util.Map;
 @RequestMapping("/api/usuarios")
 //aqui to dizendo que vai chamar sempre esse caminho e todas minhas requisições vão passar por isso
 public class UsuarioController {
+    //no controller deve ficar as requisições http e os tratamentos dela
 
     @Autowired //evita a necessidade de instanciar manualmente classes dependentes.
     private UsuarioService usuarioService;
@@ -38,10 +39,10 @@ public class UsuarioController {
     public ResponseEntity<Map<String, Object>> criarUsuario(@RequestBody Usuario usuario) { //ResponseEntity<Map<String, Object>>: O método retorna um objeto ResponseEntity que encapsula um Map contendo pares de chave/valor. Esse Map é convertido para JSON automaticamente pelo Spring Boot.
         Map<String, Object> response = new HashMap<>();
         try {
-            usuarioService.criarUsuario(usuario);
+            usuarioService.criarUsuario(usuario); //chamando o service
             // Prepara a resposta em formato JSON
             response.put("status", HttpStatus.CREATED.value()); // 201
-            response.put("message", "Usuário criado com sucesso");
+            response.put("message", "Usuário criado com sucesso"); //message é a chave e o resto é o valor do map
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
             // Prepara a resposta de erro em formato JSON
