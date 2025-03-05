@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Service
 public class UsuarioService {
+    //aqui deveriam ficar as regras de negocio em geral, contas e formulas, no caso eu não tenho muita coisa nesse projeto, portanto acaba que só tá chamando o repositorio na maioria dos casos
 
     @Autowired
     private UsuarioRepository usuarioRepository;

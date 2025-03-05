@@ -35,6 +35,9 @@ public class UsuarioController {
     //O construtor existe para que o Spring consiga passar a instância correta de UsuarioService sem que você precise criar manualmente.
     //Se o Spring não encontrar um construtor público que receba UsuarioService, ele não conseguirá injetar a dependência e lançará um erro.
 
+
+    //ResponseEntity é uma classe do Spring Framework que representa uma resposta HTTP completa, incluindo o corpo da resposta, os cabeçalhos (headers) e o status HTTP. Ele é utilizado para personalizar a resposta que você deseja enviar para o cliente em uma aplicação Spring.
+
     @PostMapping //define que é uma rota post
     public ResponseEntity<Map<String, Object>> criarUsuario(@RequestBody Usuario usuario) { //ResponseEntity<Map<String, Object>>: O método retorna um objeto ResponseEntity que encapsula um Map contendo pares de chave/valor. Esse Map é convertido para JSON automaticamente pelo Spring Boot.
         Map<String, Object> response = new HashMap<>();
@@ -54,8 +57,34 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public List<Usuario> listarUsuarios() {
-        return usuarioService.listarUsuarios();
+    public ResponseEntity<?> listarUsuarios() {
+        try {
+            List<Usuario> usuarios = usuarioService.listarUsuarios();
+
+            if (usuarios.isEmpty()) {
+            }
+
+            if (usuarios.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); //só da o retorno do 204
+                //204 - deu certo mas vazio
+
+                //minha ideia era criar uma resposta personalizada para quando estivesse vazio mas o spring boot limpa o retorno do corpo toda vez que for 204 pois não é uma prática recomendada, então não adianta fazer esse tipo de customização pelo menos no spring boot
+
+                //segue como ia ficar a customização para fins didaticos
+                //Map<String, Object> response = new HashMap<>();
+                //response.put("status", HttpStatus.NO_CONTENT.value());
+                //response.put("message", "Nenhum usuário encontrado.");
+                //return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            }
+
+            return ResponseEntity.ok(usuarios); // Retorna a lista de usuários caso não esteja vazia
+        } catch (Exception e) {
+            // Caso ocorra um erro, retorna a resposta de erro
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.put("message", "Erro ao listar usuários: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     @GetMapping("/{id}")
