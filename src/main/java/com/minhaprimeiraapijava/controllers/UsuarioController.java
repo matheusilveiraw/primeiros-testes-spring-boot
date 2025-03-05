@@ -111,9 +111,33 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public Usuario atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
-        return usuarioService.atualizarUsuario(id, usuario);
+    public ResponseEntity<?> atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
+        try {
+            Optional<Usuario> usuarioExistente = usuarioService.buscarPorId(id);
+
+            if (usuarioExistente.isEmpty()) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("status", HttpStatus.NOT_FOUND.value());
+                response.put("message", "Usuário com ID " + id + " não encontrado.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response); //erro caso id não exista
+            }
+
+            Usuario usuarioAtualizado = usuarioService.atualizarUsuario(id, usuario);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", HttpStatus.OK.value());
+            response.put("message", "Usuário atualizado com sucesso.");
+            response.put("usuario", usuarioAtualizado);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.put("message", "Erro ao atualizar usuário: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
+
 
     @DeleteMapping("/{id}")
     public void deletarUsuario(@PathVariable Long id) {
