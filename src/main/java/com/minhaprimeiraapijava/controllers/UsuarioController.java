@@ -14,18 +14,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+//no Spring Boot significa que a classe marcada com essa anotação será um controlador REST, ou seja, ela lida com requisições HTTP e retorna respostas no formato JSON
 @RequestMapping("/api/usuarios")
+//aqui to dizendo que vai chamar sempre esse caminho e todas minhas requisições vão passar por isso
 public class UsuarioController {
 
-    @Autowired
+    @Autowired //evita a necessidade de instanciar manualmente classes dependentes.
     private UsuarioService usuarioService;
+
+
+    //instanciar a classe:
+    /*public class UsuarioController {
+        private UsuarioService usuarioService = new UsuarioService();
+    }*/
 
     public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
+    //O construtor existe para que o Spring consiga passar a instância correta de UsuarioService sem que você precise criar manualmente.
+    //Se o Spring não encontrar um construtor público que receba UsuarioService, ele não conseguirá injetar a dependência e lançará um erro.
 
-    @PostMapping
-    public ResponseEntity<Map<String, Object>> criarUsuario(@RequestBody Usuario usuario) {
+    @PostMapping //define que é uma rota post
+    public ResponseEntity<Map<String, Object>> criarUsuario(@RequestBody Usuario usuario) { //ResponseEntity<Map<String, Object>>: O método retorna um objeto ResponseEntity que encapsula um Map contendo pares de chave/valor. Esse Map é convertido para JSON automaticamente pelo Spring Boot.
         Map<String, Object> response = new HashMap<>();
         try {
             usuarioService.criarUsuario(usuario);
@@ -37,7 +47,8 @@ public class UsuarioController {
             // Prepara a resposta de erro em formato JSON
             response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value()); // 500
             response.put("message", "Erro ao criar o usuário: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    response);
         }
     }
 
