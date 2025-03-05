@@ -9,13 +9,13 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)  // Nome obrigatório, máximo 100 caracteres
+    @Column(nullable = false, length = 100)
     private String nome;
 
-    @Column(unique = true, nullable = false, length = 150)  // Email deve ser único
+    @Column(nullable = false, length = 150)
     private String email;
 
-    @Column(nullable = false)  // Idade obrigatória
+    @Column(nullable = false)
     private int idade;
 
     public Long getId() {
