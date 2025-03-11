@@ -2,10 +2,12 @@ package com.minhaprimeiraapijava.controllers;
 
 
 import com.minhaprimeiraapijava.models.Compra;
+import com.minhaprimeiraapijava.repositories.CompraRepository;
 import com.minhaprimeiraapijava.services.CompraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,10 +19,18 @@ public class CompraController {
     @Autowired
     private CompraService compraService;
 
+    @Autowired
+    private CompraRepository compraRepository;
+
     @GetMapping
-    public ResponseEntity<List<Compra>> listarCompras() {
+    public ResponseEntity<?> listarCompras() {
         List<Compra> compras = compraService.listarCompras();
-        return ResponseEntity.ok(compras);
+
+        if (compras.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();  // Caso não tenha compras
+        }
+
+        return ResponseEntity.ok(compras);  // Retorna a lista de compras
     }
 
     @PostMapping
@@ -28,6 +38,7 @@ public class CompraController {
         Compra novaCompra = compraService.salvarCompra(compra);
         return ResponseEntity.ok(novaCompra);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletarCompra(@PathVariable Long id) {
@@ -41,4 +52,28 @@ public class CompraController {
                     .body("Erro ao deletar compra: " + e.getMessage());
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> atualizarCompra(@PathVariable Long id, @RequestBody Compra compraAtualizada) {
+        try {
+            Compra compra = compraService.atualizarCompra(id, compraAtualizada);
+            return ResponseEntity.ok(compra);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Compra não encontrada.");
+        } catch (Exception e) {
+            // Captura qualquer exceção e imprime a mensagem detalhada
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao atualizar compra: " + e.getMessage());
+        }
+    }
+
+    /* POST
+{
+    "usuario": {
+        "id": 1
+    },
+    "dataHora": "2025-03-11T15:00:00",
+    "valorTotal": 200.50
+}
+     */
 }
