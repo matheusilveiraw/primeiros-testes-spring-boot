@@ -29,7 +29,7 @@ public class CompraController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }
 
-            return ResponseEntity.ok(compras); // Retorna a lista de compras caso não esteja vazia
+            return ResponseEntity.ok(compras);
         } catch (Exception e) {
             Map<String, Object> response = new HashMap<>();
             response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
@@ -39,9 +39,22 @@ public class CompraController {
     }
 
     @PostMapping
-    public ResponseEntity<Compra> criarCompra(@RequestBody Compra compra) {
-        Compra novaCompra = compraService.salvarCompra(compra);
-        return ResponseEntity.ok(novaCompra);
+    public ResponseEntity<Map<String, Object>> criarCompra(@RequestBody Compra compra) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Compra novaCompra = compraService.salvarCompra(compra);
+
+            response.put("status", HttpStatus.CREATED.value());
+            response.put("message", "Compra criada com sucesso");
+            response.put("compra", novaCompra);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (Exception e) {
+            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.put("message", "Erro ao criar a compra: " + e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
 
