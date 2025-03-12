@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/compras")
@@ -18,18 +20,22 @@ public class CompraController {
     @Autowired
     private CompraService compraService;
 
-    @Autowired
-    private CompraRepository compraRepository;
-
     @GetMapping
     public ResponseEntity<?> listarCompras() {
-        List<Compra> compras = compraService.listarCompras();
+        try {
+            List<Compra> compras = compraService.listarCompras();
 
-        if (compras.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            if (compras.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
+
+            return ResponseEntity.ok(compras); // Retorna a lista de compras caso não esteja vazia
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.put("message", "Erro ao listar compras: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
-
-        return ResponseEntity.ok(compras);
     }
 
     @PostMapping
