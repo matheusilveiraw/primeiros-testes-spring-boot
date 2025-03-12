@@ -34,7 +34,7 @@ public class CompraService {
         return compraRepository.findById(id).map(compra -> {
             Usuario usuario = usuarioRepository.findById(compraAtualizada.getUsuario().getId())
                     .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
-            compra.setUsuario(usuario); // Ajustando para usar o objeto Usuario
+            compra.setUsuario(usuario);
 
             compra.setDataHora(compraAtualizada.getDataHora());
             compra.setValorTotal(compraAtualizada.getValorTotal());

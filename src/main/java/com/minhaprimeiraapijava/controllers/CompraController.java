@@ -1,6 +1,5 @@
 package com.minhaprimeiraapijava.controllers;
 
-
 import com.minhaprimeiraapijava.models.Compra;
 import com.minhaprimeiraapijava.repositories.CompraRepository;
 import com.minhaprimeiraapijava.services.CompraService;
@@ -82,6 +81,4 @@ public class CompraController {
 }
 }
      */
-
-
 }

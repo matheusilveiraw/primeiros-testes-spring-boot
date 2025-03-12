@@ -12,8 +12,7 @@ public class Compra {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
-    private Usuario usuario; // Aqui está o usuário associado à compra
-
+    private Usuario usuario;
     private LocalDateTime dataHora;
     private Double valorTotal;
 
