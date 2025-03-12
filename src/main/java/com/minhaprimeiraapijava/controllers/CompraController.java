@@ -27,10 +27,10 @@ public class CompraController {
         List<Compra> compras = compraService.listarCompras();
 
         if (compras.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();  // Caso não tenha compras
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
-        return ResponseEntity.ok(compras);  // Retorna a lista de compras
+        return ResponseEntity.ok(compras);
     }
 
     @PostMapping
@@ -61,7 +61,6 @@ public class CompraController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Compra não encontrada.");
         } catch (Exception e) {
-            // Captura qualquer exceção e imprime a mensagem detalhada
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao atualizar compra: " + e.getMessage());
         }
@@ -74,6 +73,15 @@ public class CompraController {
     },
     "dataHora": "2025-03-11T15:00:00",
     "valorTotal": 200.50
+
+    PUT
+
+    {
+    "usuarioId": 27,
+    "valor": 150.0
+}
 }
      */
+
+
 }
