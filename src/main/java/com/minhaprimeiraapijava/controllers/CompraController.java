@@ -58,6 +58,18 @@ public class CompraController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> atualizarCompra(@PathVariable Long id, @RequestBody Compra compraAtualizada) {
+        try {
+            Compra compra = compraService.atualizarCompra(id, compraAtualizada);
+            return ResponseEntity.ok(compra);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Compra não encontrada.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao atualizar compra: " + e.getMessage());
+        }
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletarCompra(@PathVariable Long id) {
@@ -71,7 +83,7 @@ public class CompraController {
                 response.put("message", "Usuário com ID " + id + " não encontrado.");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
-            
+
             compraService.deletarCompra(id);
 
             Map<String, Object> response = new HashMap<>();
@@ -87,18 +99,6 @@ public class CompraController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> atualizarCompra(@PathVariable Long id, @RequestBody Compra compraAtualizada) {
-        try {
-            Compra compra = compraService.atualizarCompra(id, compraAtualizada);
-            return ResponseEntity.ok(compra);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Compra não encontrada.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro ao atualizar compra: " + e.getMessage());
-        }
-    }
 
     /* POST
 {
