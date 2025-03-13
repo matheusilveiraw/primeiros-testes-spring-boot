@@ -38,24 +38,6 @@ public class UsuarioController {
 
     //ResponseEntity é uma classe do Spring Framework que representa uma resposta HTTP completa, incluindo o corpo da resposta, os cabeçalhos (headers) e o status HTTP. Ele é utilizado para personalizar a resposta que você deseja enviar para o cliente em uma aplicação Spring.
 
-    @PostMapping //define que é uma rota post
-    public ResponseEntity<Map<String, Object>> criarUsuario(@RequestBody Usuario usuario) { //ResponseEntity<Map<String, Object>>: O método retorna um objeto ResponseEntity que encapsula um Map contendo pares de chave/valor. Esse Map é convertido para JSON automaticamente pelo Spring Boot.
-        Map<String, Object> response = new HashMap<>();
-        try {
-            usuarioService.criarUsuario(usuario); //chamando o service
-            // Prepara a resposta em formato JSON
-            response.put("status", HttpStatus.CREATED.value()); // 201
-            response.put("message", "Usuário criado com sucesso"); //message é a chave e o resto é o valor do map
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (Exception e) {
-            // Prepara a resposta de erro em formato JSON
-            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value()); // 500
-            response.put("message", "Erro ao criar o usuário: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    response);
-        }
-    }
-
     @GetMapping
     public ResponseEntity<?> listarUsuarios() {
         try {
@@ -88,7 +70,6 @@ public class UsuarioController {
     }
 
 
-
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarUsuario(@PathVariable Long id) {
         try {
@@ -107,6 +88,25 @@ public class UsuarioController {
             response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
             response.put("message", "Erro ao buscar usuário: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+
+    @PostMapping //define que é uma rota post
+    public ResponseEntity<Map<String, Object>> criarUsuario(@RequestBody Usuario usuario) { //ResponseEntity<Map<String, Object>>: O método retorna um objeto ResponseEntity que encapsula um Map contendo pares de chave/valor. Esse Map é convertido para JSON automaticamente pelo Spring Boot.
+        Map<String, Object> response = new HashMap<>();
+        try {
+            usuarioService.criarUsuario(usuario); //chamando o service
+            // Prepara a resposta em formato JSON
+            response.put("status", HttpStatus.CREATED.value()); // 201
+            response.put("message", "Usuário criado com sucesso"); //message é a chave e o resto é o valor do map
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (Exception e) {
+            // Prepara a resposta de erro em formato JSON
+            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value()); // 500
+            response.put("message", "Erro ao criar o usuário: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    response);
         }
     }
 
