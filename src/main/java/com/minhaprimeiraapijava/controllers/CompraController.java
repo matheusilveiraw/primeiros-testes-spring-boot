@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/compras")
@@ -61,13 +62,28 @@ public class CompraController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletarCompra(@PathVariable Long id) {
         try {
+
+            Optional<Compra> compraExistente = compraService.buscarPorId(id);
+
+            if (compraExistente.isEmpty()) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("status", HttpStatus.NOT_FOUND.value());
+                response.put("message", "Usuário com ID " + id + " não encontrado.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+            
             compraService.deletarCompra(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); //sem conteudo
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Compra não encontrada.");
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", HttpStatus.OK.value());
+            response.put("message", "Compra deletada com sucesso.");
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro ao deletar compra: " + e.getMessage());
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.put("message", "Erro ao deletar compra: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 

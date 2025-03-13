@@ -142,9 +142,9 @@ public class UsuarioController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletarUsuario(@PathVariable Long id) {
         try {
-            Optional<Usuario> usuarioExistente = usuarioService.buscarPorId(id);
+            Optional<Usuario> usuarioExistente = usuarioService.buscarPorId(id); //optinal é para representar um valor que pode ou não estar presente
 
-            if (usuarioExistente.isEmpty()) {
+            if (usuarioExistente.isEmpty()) { //não pode ser um null pq o optional nunca retorna um null
                 Map<String, Object> response = new HashMap<>();
                 response.put("status", HttpStatus.NOT_FOUND.value());
                 response.put("message", "Usuário com ID " + id + " não encontrado.");
